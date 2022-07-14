@@ -30,6 +30,10 @@ table th {
   text-transform: uppercase;
 }
 
+tr:nth-child(even) {
+  background-color: #e6e6e6;
+}
+
 @media (prefers-color-scheme: dark) {
   table {
     border: 1px solid #ccc;
@@ -54,7 +58,7 @@ table th {
   table td {
     padding: .625em;
     text-align: center;
-    color:#0000ff
+    color:#3d3d3d
   }
 
   table th {

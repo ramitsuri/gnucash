@@ -6,6 +6,8 @@ from decimal import Decimal
 import piecash
 from piecash import Transaction, Split
 
+import locale
+
 month_totals = []
 
 class BalanceInfo: 
@@ -141,7 +143,7 @@ def write_html_report_for_account(file, account_info, indent):
     file.write('\n')
 
     for balance in account_info.balances:
-        file.write('<td data-label="' + get_month(balance.month) + '">' + str(balance.amount) + '</td>')
+        file.write('<td data-label="' + get_month(balance.month) + '">' + locale.currency(balance.amount, grouping=True) + '</td>')
         file.write('\n')
 
     file.write('</tr>')
@@ -175,7 +177,7 @@ def write_html_report(account_infos):
 </thead>
 <tbody>
 """
-    with open('report.html', 'w') as file: 
+    with open('index.html', 'w') as file: 
         file.writelines(initial_html)
         # write month totals
         file.write('<tr>')
@@ -184,7 +186,7 @@ def write_html_report(account_infos):
         file.write('\n')
 
         for amount in month_totals:
-            file.write('<td data-label="' + get_month(-1) + '">' + str(amount) + '</td>')
+            file.write('<td data-label="' + get_month(-1) + '">' + locale.currency(amount, grouping=True) + '</td>')
             file.write('\n')
         file.write('</tr>')
         file.write('\n')
@@ -203,6 +205,7 @@ def write_html_report(account_infos):
         file.write('\n')
         file.write('</html>')
 
+locale.setlocale(locale.LC_ALL, '')
 config = read_config()
 book = piecash.open_book(config['file'], readonly=True, open_if_lock=True)
 account_infos = build_account_map()
