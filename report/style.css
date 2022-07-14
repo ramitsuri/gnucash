@@ -50,7 +50,7 @@ tr:nth-child(even) {
   }
 
   table tr  {
-    background-color: #f8f8f8;
+    background-color: #3d3d3d;
   border: 1px solid #ddd;
     padding: .35em;
   }
@@ -58,7 +58,7 @@ tr:nth-child(even) {
   table td {
     padding: .625em;
     text-align: center;
-    color:#3d3d3d
+    color:#ffffff
   }
 
   table th {
@@ -67,10 +67,14 @@ tr:nth-child(even) {
     text-transform: uppercase;
   }
 
+  tr:nth-child(even) {
+    background-color: #525252;
+  }
+
 }
 
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 1000px) {
   table {
     border: 0;
   }
@@ -136,4 +140,5 @@ tr:nth-child(even) {
 body {
   font-family: "Open Sans", sans-serif;
   line-height: 1.25;
+  background-color: #525252;
 }
