@@ -1,0 +1,22 @@
+{
+	"details": {
+		"date": {
+			"year": 2022,
+			"month": 6
+		},
+		"description": "Change",
+		"transfer_account": "Income:Investment Gains",
+		"file": "file.gnucash"
+	},
+	"accounts": [{
+			"base_account": "Assets:Investments:Brokerage Account:ESPP",
+			"transfer_account": "Assets:Investments:Brokerage Account:ESPP:Gains",
+			"new_value": "100"
+		},
+		{
+			"base_account": "Assets:Investments:Retirement:401K",
+			"transfer_account": "Assets:Investments:Retirement:401K:Gains",
+			"new_value": "100"
+		}
+	]
+}
