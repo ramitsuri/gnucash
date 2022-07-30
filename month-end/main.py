@@ -61,5 +61,6 @@ def add_transactions(details, account_list, file):
 
 
 new_values = read_json()
-accounts = read_and_update_account_values(new_values['accounts'], new_values['file'])
-add_transactions(new_values['details'], accounts, new_values['file'])
+gnu_file = new_values['details']['file']
+accounts = read_and_update_account_values(new_values['accounts'], gnu_file)
+add_transactions(new_values['details'], accounts, gnu_file)
