@@ -8,8 +8,6 @@ from piecash import Transaction, Split
 
 import locale
 
-month_totals = []
-
 class BalanceInfo: 
     def __init__(self, month, amount):
         self.month = month
@@ -39,17 +37,26 @@ def get_end_date(year, month, time_delta):
     return datetime(year, month, day, 0, 0, 0, 0, timezone(time_delta)).date()
 
 
-def build_account_map():
+def build_account_map(accounts, exclude_tax_accounts):
     account_infos = []
     completed_children = set()
-    for account in book.accounts:
+    for account in accounts:
         if account.type != "EXPENSE":
             continue
         if account.parent.type == "ROOT":
             continue
         if account in completed_children:
             continue
-        if not account.children: # list is empty
+            
+        should_exclude_account = False
+        for exclude_tax_account in exclude_tax_accounts:
+            if exclude_tax_account in account.fullname:
+                should_exclude_account = True
+                break
+        if should_exclude_account:
+            continue
+        
+        if not account.children: # children empty
             account_infos.append(AccountInfo(account))
         else: 
             account_info = AccountInfo(account)    
@@ -63,7 +70,7 @@ def build_account_map():
 
 def set_balances_on_accounts(account_infos, year, time_delta):
     for info in account_infos:
-        if not info.children: # list empty
+        if not info.children: # children empty
             info.balances = get_balances(info.account, year, time_delta)
         else:
             for child in info.children:
@@ -110,6 +117,7 @@ def get_month(month):
 
 
 def calculate_totals(account_infos):
+    month_totals = []
     # calculate totals column (per account)
     for info in account_infos:
         info_total = Decimal("0.0")
@@ -131,6 +139,7 @@ def calculate_totals(account_infos):
         for balance in info.balances:
             month_totals[index] = month_totals[index] + balance.amount
             index += 1
+    return month_totals
 
 
 def write_html_report_for_account(file, account_info, indent):
@@ -150,11 +159,14 @@ def write_html_report_for_account(file, account_info, indent):
     file.write('\n')
 
 
-def write_html_report(account_infos): 
-    initial_html = """
+def write_html_report(month_totals, report_name, account_infos): 
+    initial_html1 = """
 <html>
 <head>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
+"""
+
+    initial_html2 = """
 </head>
 <table>
 <thead>
@@ -177,8 +189,12 @@ def write_html_report(account_infos):
 </thead>
 <tbody>
 """
-    with open('index.html', 'w') as file: 
-        file.writelines(initial_html)
+    with open('output/reports/' + report_name + '.html', 'w') as file: 
+        file.writelines(initial_html1)
+        file.write('\n')
+        file.write('<title>' + report_name + '</title>')
+        file.write('\n')
+        file.writelines(initial_html2)
         # write month totals
         file.write('<tr>')
         file.write('\n')
@@ -205,11 +221,24 @@ def write_html_report(account_infos):
         file.write('\n')
         file.write('</html>')
 
-locale.setlocale(locale.LC_ALL, '')
-config = read_config()
-book = piecash.open_book(config['file'], readonly=True, open_if_lock=True)
-account_infos = build_account_map()
-set_balances_on_accounts(account_infos, config['year'], timedelta(hours=config['time_delta_hours']))
-calculate_totals(account_infos)
-write_html_report(account_infos)
-book.close()
+def main():
+    locale.setlocale(locale.LC_ALL, '')
+    config = read_config()
+    book = piecash.open_book(config['file'], readonly=True, open_if_lock=True)
+
+    # Report with taxes 
+    account_infos_with_taxes = build_account_map(book.accounts, exclude_tax_accounts = [])
+    set_balances_on_accounts(account_infos_with_taxes, config['year'], timedelta(hours=config['time_delta_hours']))
+    month_totals_with_taxes = calculate_totals(account_infos_with_taxes)
+    write_html_report(month_totals_with_taxes, str(config['year']) + "_Taxes", account_infos_with_taxes)
+
+    # Report without taxes
+    account_infos_without_taxes = build_account_map(book.accounts, exclude_tax_accounts = config['tax_accounts_start_with'])
+    set_balances_on_accounts(account_infos_without_taxes, config['year'], timedelta(hours=config['time_delta_hours']))
+    month_totals_without_taxes = calculate_totals(account_infos_without_taxes)
+    write_html_report(month_totals_without_taxes, str(config['year']) + "_No_Taxes", account_infos_without_taxes)
+    
+    book.close()
+
+if __name__ == "__main__":
+    main()

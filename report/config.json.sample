@@ -4,5 +4,7 @@
     "//year": "Year for which to generate reports",
     "year": 2022,
     "//time_delta_hours": "Duration in hours between your time zone and UTC. Ex +4 hours for America/New_York",
-    "time_delta_hours": 4
+    "time_delta_hours": 4,
+    "//tax_accounts_start_with": "Substring to use to check which accounts to ignore for reports without taxes",
+    "tax_accounts_start_with": ["Taxes:", "Taxes (Spouse):"]
 }
