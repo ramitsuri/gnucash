@@ -37,7 +37,7 @@ def get_end_date(year, month, time_delta):
     return datetime(year, month, day, 0, 0, 0, 0, timezone(time_delta)).date()
 
 
-def build_account_map(accounts, exclude_tax_accounts):
+def build_account_map(accounts, exclude_parents, exclude_children):
     account_infos = []
     completed_children = set()
     for account in accounts:
@@ -47,13 +47,7 @@ def build_account_map(accounts, exclude_tax_accounts):
             continue
         if account in completed_children:
             continue
-            
-        should_exclude_account = False
-        for exclude_tax_account in exclude_tax_accounts:
-            if exclude_tax_account in account.fullname:
-                should_exclude_account = True
-                break
-        if should_exclude_account:
+        if any(exclude_parent in account.fullname for exclude_parent in exclude_parents):
             continue
         
         if not account.children: # children empty
@@ -61,8 +55,10 @@ def build_account_map(accounts, exclude_tax_accounts):
         else: 
             account_info = AccountInfo(account)    
             for child in account.children:
+                completed_children.add(child)    
+                if any(exclude_child in child.fullname for exclude_child in exclude_children):
+                    continue
                 account_info.children.append(AccountInfo(child))
-                completed_children.add(child)
             account_infos.append(account_info)
 
     return account_infos
@@ -221,22 +217,29 @@ def write_html_report(month_totals, report_name, account_infos):
         file.write('\n')
         file.write('</html>')
 
+def debug_print_accounts(account_infos): 
+    for account_info in account_infos:
+        print(account_info.account.fullname)
+        if account_info.children: 
+            for child in account_info.children:
+                print("     " + child.account.fullname)
+
 def main():
     locale.setlocale(locale.LC_ALL, '')
     config = read_config()
     book = piecash.open_book(config['file'], readonly=True, open_if_lock=True)
 
-    # Report with taxes 
-    account_infos_with_taxes = build_account_map(book.accounts, exclude_tax_accounts = [])
-    set_balances_on_accounts(account_infos_with_taxes, config['year'], timedelta(hours=config['time_delta_hours']))
-    month_totals_with_taxes = calculate_totals(account_infos_with_taxes)
-    write_html_report(month_totals_with_taxes, str(config['year']) + "_Taxes", account_infos_with_taxes)
-
-    # Report without taxes
-    account_infos_without_taxes = build_account_map(book.accounts, exclude_tax_accounts = config['tax_accounts_start_with'])
-    set_balances_on_accounts(account_infos_without_taxes, config['year'], timedelta(hours=config['time_delta_hours']))
-    month_totals_without_taxes = calculate_totals(account_infos_without_taxes)
-    write_html_report(month_totals_without_taxes, str(config['year']) + "_No_Taxes", account_infos_without_taxes)
+    # Expense report with all accounts 
+    account_infos_all = build_account_map(book.accounts, exclude_parents = [], exclude_children = [])
+    set_balances_on_accounts(account_infos_all, config['year'], timedelta(hours=config['time_delta_hours']))
+    month_totals_all = calculate_totals(account_infos_all)
+    write_html_report(month_totals_all, str(config['year']) + "_Expenses_All", account_infos_all)
+    
+    # Expense report without some accounts
+    account_infos_filtered = build_account_map(book.accounts, exclude_parents = config['exclude_parents'], exclude_children = config['exclude_children'])
+    set_balances_on_accounts(account_infos_filtered, config['year'], timedelta(hours=config['time_delta_hours']))
+    month_totals_filtered = calculate_totals(account_infos_filtered)
+    write_html_report(month_totals_filtered, str(config['year']) + "_Expenses_Filtered", account_infos_filtered)
     
     book.close()
 
