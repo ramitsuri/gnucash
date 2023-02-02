@@ -60,7 +60,12 @@ def add_transactions(details, account_list, file):
     book.close()
 
 
-new_values = read_json()
-gnu_file = new_values['details']['file']
-accounts = read_and_update_account_values(new_values['accounts'], gnu_file)
-add_transactions(new_values['details'], accounts, gnu_file)
+def main():
+    new_values = read_json()
+    gnu_file = new_values['details']['file']
+    accounts = read_and_update_account_values(new_values['accounts'], gnu_file)
+    add_transactions(new_values['details'], accounts, gnu_file)
+
+
+if __name__ == "__main__":
+    main()
