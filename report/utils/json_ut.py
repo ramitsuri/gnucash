@@ -1,11 +1,11 @@
 import jsonpickle
 from decimal import Decimal
-from datetime import datetime
+from utils.date import current_utc
 
 
 def print_json(path, report_name, totals_for_accounts):
     jsonpickle.handlers.registry.register(Decimal, _DecimalHandler)
-    time = datetime.now().isoformat()
+    time = current_utc()
     report = _Report(report_name, time, totals_for_accounts)
     json_string = jsonpickle.encode(report, unpicklable=False)
     with open(path + report_name + '.json', 'w') as file:

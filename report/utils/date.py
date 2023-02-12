@@ -18,3 +18,7 @@ def get_month(month):
 
 def to_time_delta(hours):
     return timedelta(hours=hours)
+
+
+def current_utc():
+    return datetime.utcnow()

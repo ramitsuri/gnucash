@@ -52,14 +52,15 @@ def print_expense_reports(accounts, year, time_delta, exclude_parents, exclude_c
 def main():
     config = read_config()
     gnu_cash_file = config['file']
-    year = config['year']
+    years = config['years']
     time_delta = to_time_delta(config['time_delta_hours'])
 
     book = piecash.open_book(gnu_cash_file, readonly=True, open_if_lock=True)
 
     exclude_parents = config['exclude_parents']
     exclude_children = config['exclude_children']
-    print_expense_reports(book.accounts, year, time_delta, exclude_parents, exclude_children)
+    for year in years:
+        print_expense_reports(book.accounts, year, time_delta, exclude_parents, exclude_children)
 
     book.close()
 
