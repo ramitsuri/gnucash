@@ -1,0 +1,12 @@
+- [ ] Net worth over time
+- [ ] Income over time
+  - [ ] Net
+  - [ ] Gross
+- [ ] Main account balances 
+  - [ ] Credit cards 
+  - [ ] Asset accounts 
+  - [ ] Investment accounts 
+- [ ] Savings goals
+  - [ ] How much being put into savings account
+  - [ ] How much is invested 
+  - [ ] How much is retirement
