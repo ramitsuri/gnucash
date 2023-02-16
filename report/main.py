@@ -4,6 +4,8 @@ import piecash
 from utils.date import to_time_delta
 import expense
 import income
+import assets
+import liabilities
 
 
 def read_config():
@@ -29,6 +31,16 @@ def main():
     income_config = config['income']
     income_root_account = book.root_account.children(name="Income")
     income.print_reports(income_root_account, income_config, time_delta)
+
+    # Assets reports
+    assets_config = config['assets']
+    assets_root_account = book.root_account.children(name="Assets")
+    assets.print_reports(assets_root_account, assets_config, time_delta)
+
+    # Liabilities reports
+    liabilities_config = config['liabilities']
+    liabilities_root_account = book.root_account.children(name="Liabilities")
+    liabilities.print_reports(liabilities_root_account, liabilities_config, time_delta)
 
     book.close()
 

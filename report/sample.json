@@ -18,11 +18,25 @@
       "Expenses:Insurance:Health Insurance (Spouse)"
     ]
   },
-    "income": {
-        "years": [
-            2021,
-            2022,
-            2023
-        ]
-    }
+  "income": {
+    "years": [
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "assets": {
+    "years": [
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "liabilities": {
+    "years": [
+      2021,
+      2022,
+      2023
+    ]
+  }
 }
