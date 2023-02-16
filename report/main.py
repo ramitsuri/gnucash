@@ -22,13 +22,13 @@ def main():
 
     # Expense reports
     expense_config = config['expense']
-    expenses = book.root_account.children(name="Expenses")
-    expense.print_reports(expenses, expense_config, time_delta)
+    expense_root_account = book.root_account.children(name="Expenses")
+    expense.print_reports(expense_root_account, expense_config, time_delta)
 
     # Income reports
     income_config = config['income']
-    incomes = book.root_account.children(name="Income")
-    income.print_reports(incomes, income_config, time_delta)
+    income_root_account = book.root_account.children(name="Income")
+    income.print_reports(income_root_account, income_config, time_delta)
 
     book.close()
 

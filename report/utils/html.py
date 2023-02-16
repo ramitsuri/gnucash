@@ -2,7 +2,7 @@ from utils.date import get_month
 import locale
 
 
-def print_html(path, report_name, totals_for_accounts):
+def print_html(path, report_name, root_account_total):
     locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
     text = """
 <html>
@@ -32,7 +32,7 @@ def print_html(path, report_name, totals_for_accounts):
        <tbody>
         """.format(report_name=report_name)
 
-    text += __print_tree(totals_for_accounts)
+    text += __print_tree(root_account_total)
 
     text += """
         </tbody>

@@ -1,7 +1,7 @@
 import locale
 
 
-def print_markdown(report_name, totals_for_accounts):
+def print_markdown(report_name, root_account_total):
     locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
     text = ''
     text += '# ' + report_name
@@ -12,7 +12,7 @@ def print_markdown(report_name, totals_for_accounts):
     text += '|---|---|---|---|---|---|---|---|---|---|---|---|---|---|'
     text += '\n'
 
-    text += __print_tree(totals_for_accounts)
+    text += __print_tree(root_account_total)
 
     print(text)
 
