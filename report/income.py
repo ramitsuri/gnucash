@@ -15,9 +15,9 @@ def __print_report(root_account, year, time_delta):
     html_path = 'output/html/'
     json_path = 'output/json/'
 
-    should_print_html = False
-    should_print_json = False
-    should_print_markdown = True
+    should_print_html = True
+    should_print_json = True
+    should_print_markdown = False
 
     totals_root = get_totals_for_accounts(root_account, year, time_delta)
     report_name = str(year) + "_Income_All"
