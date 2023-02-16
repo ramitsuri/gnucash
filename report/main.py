@@ -21,10 +21,8 @@ def main():
 
     # Expense reports
     expense_config = config['expense']
-    years = expense_config['years']
-    exclude_parents = expense_config['exclude_parents']
-    exclude_children = expense_config['exclude_children']
-    expense.print_reports(book.accounts, years, time_delta, exclude_parents, exclude_children)
+    expenses = book.root_account.children(name="Expenses")
+    expense.print_reports(expenses, expense_config, time_delta)
 
     book.close()
 

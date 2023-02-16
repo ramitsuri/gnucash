@@ -1,42 +1,45 @@
 import locale
 
 
-def print_markdown(report_name, totals_for_accounts, totals_for_each_month):
+def print_markdown(report_name, totals_for_accounts):
     locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
-    __print_without_new_line('# ' + report_name)
-    __print_without_new_line('\n')
-    __print_without_new_line('|**ACCOUNT**|**JAN**|**FEB**|**MAR**|**APR**|**MAY**|**JUN**')
-    __print_without_new_line('|**JUL**|**AUG**|**SEP**|**OCT**|**NOV**|**DEC**|**TOTAL**|')
-    __print_without_new_line('\n')
-    __print_without_new_line('|---|---|---|---|---|---|---|---|---|---|---|---|---|---|')
-    __print_without_new_line('\n')
-    __print_without_new_line('|')
-    __print_account_total(totals_for_each_month, False)
-    for account_total in totals_for_accounts:
-        __print_without_new_line('|')
-        __print_account_total(account_total, False)
-        if account_total.children:  # list not empty
-            for child in account_total.children:
-                __print_without_new_line('|')
-                __print_account_total(child, True)
+    text = ''
+    text += '# ' + report_name
+    text += '\n'
+    text += '|**ACCOUNT**|**JAN**|**FEB**|**MAR**|**APR**|**MAY**|**JUN**'
+    text += '|**JUL**|**AUG**|**SEP**|**OCT**|**NOV**|**DEC**|**TOTAL**|'
+    text += '\n'
+    text += '|---|---|---|---|---|---|---|---|---|---|---|---|---|---|'
+    text += '\n'
+
+    text += __print_tree(totals_for_accounts)
+
+    print(text)
 
 
-def __print_account_total(account_total, indent):
-    if indent:
-        __print_without_new_line('- ' + account_total.name)
+def __print_tree(root_account_total, level=0):
+    text = ''
+    text += __print_row(root_account_total, level)
+    text += '\n'
+    for account_total in root_account_total.children:
+        text += __print_tree(account_total, level + 1)
+    return text
+
+
+def __print_row(account_total, level):
+    if level <= 1:
+        indent = ''
     else:
-        __print_without_new_line(account_total.name)
-    __print_without_new_line('|')
+        indent = ('  ' * (level - 2)) + '- '
+    text = '|'
+    text += indent + account_total.name
+    text += '|'
+
     for balance in account_total.balances:
         amount = locale.currency(balance.amount, grouping=True)
-        __print_without_new_line(amount)
-        __print_without_new_line('|')
+        text += amount
+        text += '|'
     amount = locale.currency(account_total.total, grouping=True)
-    __print_without_new_line(amount)
-    __print_without_new_line('|')
-
-    __print_without_new_line('\n')
-
-
-def __print_without_new_line(value):
-    print(value, end="")
+    text += amount
+    text += '|'
+    return text

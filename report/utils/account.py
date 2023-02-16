@@ -1,8 +1,6 @@
 from utils.date import get_start_date, get_end_date
 from decimal import Decimal
 
-_ROOT = "ROOT"
-
 
 class AccountTotal:
     def __init__(self, name, fullname):
@@ -34,25 +32,17 @@ class _BalanceInfo:
         self.amount = amount  # Decimal amounts
 
 
-def get_totals_for_accounts(accounts, account_type, year, time_delta):
-    account_infos = __get_relevant_accounts(accounts, account_type)
-    __set_monthly_balances_on_accounts(account_infos, year, time_delta)
-    account_totals = __convert_to_account_totals(account_infos)
-    return account_totals
+def get_totals_for_accounts(root_account, year, time_delta, with_running_balance=False):
+    root_account_info = __get_relevant_accounts(root_account)
+    if with_running_balance:
+        __set_monthly_running_balances_on_accounts(root_account_info, year, time_delta)
+    else:
+        __set_monthly_balances_on_accounts(root_account_info, year, time_delta)
+    account_total = __convert_to_account_totals(root_account_info)
+    return account_total
 
 
-def get_totals_for_each_month(account_totals):
-    month_total = AccountTotal("Total", "Total")
-    for account_total in account_totals:
-        month_index = 0
-        for account_balance in account_total.balances:
-            existing_amount = month_total.balances[month_index].amount
-            month_total.balances[month_index].amount = existing_amount + account_balance.amount
-            month_index += 1
-        month_total.total = month_total.total + account_total.total
-    return month_total
-
-
+# TODO convert to use the tree root account
 def filter_out_and_get_totals(account_totals, exclude_parents, exclude_children):
     totals = []
     for account_total in account_totals:
@@ -76,58 +66,42 @@ def filter_out_and_get_totals(account_totals, exclude_parents, exclude_children)
     return totals
 
 
-def __convert_to_account_totals(account_infos):
-    totals = []
-    for info in account_infos:
-        total = AccountTotal(info.account.name, info.account.fullname)
-        for balance_info in info.balance_infos:
-            total.balances[balance_info.month - 1].amount = balance_info.amount
-            total.total += balance_info.amount
-
-        if info.children:
-            for child in info.children:
-                child_total = AccountTotal(child.account.name, child.account.fullname)
-                for child_balance_info in child.balance_infos:
-                    child_total.balances[child_balance_info.month - 1].amount = child_balance_info.amount
-                    child_total.total += child_balance_info.amount
-                total.children.append(child_total)
-        totals.append(total)
-    return totals
+def __convert_to_account_totals(root_account_info):
+    children = [__convert_to_account_totals(child) for child in root_account_info.children]
+    total = AccountTotal(root_account_info.account.name, root_account_info.account.fullname)
+    total.children = children
+    for balance_info in root_account_info.balance_infos:
+        total.balances[balance_info.month - 1].amount = balance_info.amount
+        total.total += balance_info.amount
+    return total
 
 
-# Build a list of accounts filtered according to the account_type
-def __get_relevant_accounts(accounts, account_type):
-    account_infos = []
-    completed_children = set()
-    for account in accounts:
-        if account.parent.type == _ROOT:
-            continue
-        if account.type != account_type:
-            continue
-        if account in completed_children:
-            continue
-
-        if not account.children:  # children empty
-            account_infos.append(_AccountInfo(account))
-        else:
-            account_info = _AccountInfo(account)
-            for child in account.children:
-                completed_children.add(child)
-                account_info.children.append(_AccountInfo(child))
-            account_infos.append(account_info)
-
-    return account_infos
+# Build _AccountInfo tree that holds PieCash Accounts.
+def __get_relevant_accounts(root_account):
+    children = [__get_relevant_accounts(child) for child in root_account.children]
+    account_info = _AccountInfo(root_account)
+    account_info.children = children
+    return account_info
 
 
-# Calculates and sets monthly balances on accounts
-def __set_monthly_balances_on_accounts(account_infos, year, time_delta):
-    for info in account_infos:
-        if not info.children:  # children empty
-            info.balance_infos = __get_balances_for_account_for_year(info.account, year, time_delta)
-        else:
-            for child in info.children:
-                child.balance_infos = __get_balances_for_account_for_year(child.account, year, time_delta)
-            info.balance_infos = __calculate_and_get_balances_for_parent(info)
+# Traverses the tree in post order and sets balances. If account has no children, balances are evaluated, if there are
+# children, balances are calculated from children
+def __set_monthly_balances_on_accounts(root_account_info, year, time_delta):
+    for account_info in root_account_info.children:
+        __set_monthly_balances_on_accounts(account_info, year, time_delta)
+    if root_account_info.children:
+        root_account_info.balance_infos = __calculate_and_get_balances_for_parent(root_account_info)
+    else:
+        root_account_info.balance_infos = __get_balances_for_account_for_year(root_account_info.account, year,
+                                                                              time_delta)
+
+
+# Traverses the tree in post order and sets balances. If account has no children, balances are evaluated, if there are
+# children, balances are calculated from children
+def __set_monthly_running_balances_on_accounts(root_account_info, year, time_delta):
+    for account_info in root_account_info.children:
+        __set_monthly_running_balances_on_accounts(account_info, year, time_delta)
+    root_account_info.balance_infos = __calculate_and_get_running_balances(root_account_info, year, time_delta)
 
 
 # Calculates balances for all months for an account for a year
@@ -161,4 +135,15 @@ def __calculate_and_get_balances_for_parent(parent_account_info):
         for child in parent_account_info.children:
             child_sum += child.balance_infos[month - 1].amount
         balance_infos.append(_BalanceInfo(month, child_sum))
+    return balance_infos
+
+
+# Calculates balances for parent from its child accounts
+def __calculate_and_get_running_balances(account_info, year, time_delta):
+    balance_infos = []
+    months = range(1, 13)
+    for month in months:
+        end_of_month_date = get_end_date(year, month, time_delta)
+        end_of_month_balance = account_info.account.get_balance(at_date=end_of_month_date)
+        balance_infos.append(_BalanceInfo(month, end_of_month_balance))
     return balance_infos
