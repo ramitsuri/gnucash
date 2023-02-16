@@ -3,6 +3,7 @@ import piecash
 
 from utils.date import to_time_delta
 import expense
+import income
 
 
 def read_config():
@@ -23,6 +24,11 @@ def main():
     expense_config = config['expense']
     expenses = book.root_account.children(name="Expenses")
     expense.print_reports(expenses, expense_config, time_delta)
+
+    # Income reports
+    income_config = config['income']
+    incomes = book.root_account.children(name="Income")
+    income.print_reports(incomes, income_config, time_delta)
 
     book.close()
 

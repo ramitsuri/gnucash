@@ -1,0 +1,28 @@
+{
+  "//file": "Path to file to be used for report generation. Should be sqlite",
+  "file": "file.gnucash",
+  "//time_delta_hours": "Duration in hours between your time zone and UTC. Ex +4 hours for America/New_York",
+  "time_delta_hours": 4,
+  "expense": {
+    "years": [
+      2021,
+      2022,
+      2023
+    ],
+    "exclude_parents": [
+      "Expenses:Taxes",
+      "Expenses:Taxes (Spouse)"
+    ],
+    "exclude_children": [
+      "Expenses:Insurance:Health Insurance",
+      "Expenses:Insurance:Health Insurance (Spouse)"
+    ]
+  },
+    "income": {
+        "years": [
+            2021,
+            2022,
+            2023
+        ]
+    }
+}
