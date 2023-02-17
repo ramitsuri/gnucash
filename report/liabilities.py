@@ -15,9 +15,9 @@ def __print_report(root_account, year, time_delta):
     html_path = 'output/html/'
     json_path = 'output/json/'
 
-    should_print_html = False
-    should_print_json = False
-    should_print_markdown = True
+    should_print_html = True
+    should_print_json = True
+    should_print_markdown = False
 
     # For accounts like liabilities and assets it makes sense to show the running total instead of how much the value
     # changed in a given month. That is what the `with_running_balance` Boolean does.
