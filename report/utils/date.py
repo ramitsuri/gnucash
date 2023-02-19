@@ -21,4 +21,4 @@ def to_time_delta(hours):
 
 
 def current_utc():
-    return datetime.utcnow()
+    return datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
