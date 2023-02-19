@@ -3,6 +3,10 @@
   "file": "file.gnucash",
   "//time_delta_hours": "Duration in hours between your time zone and UTC. Ex +4 hours for America/New_York",
   "time_delta_hours": 4,
+  "print_expense": true,
+  "print_income": false,
+  "print_assets": false,
+  "print_liabilities": false,
   "expense": {
     "years": [
       2021,
