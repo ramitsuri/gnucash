@@ -2,10 +2,7 @@ import json
 import piecash
 
 from utils.date import to_time_delta
-import expense
-import income
-import assets
-import liabilities
+import report
 
 
 def read_config():
@@ -34,25 +31,25 @@ def main():
     if print_expense:
         expense_config = config['expense']
         expense_root_account = book.root_account.children(name=expense_config['root_account_name'])
-        expense.print_reports(expense_root_account, expense_config, time_delta, years, json_path, html_path)
+        report.print_reports(expense_root_account, expense_config, time_delta, years, json_path, html_path)
 
     # Income reports
     if print_income:
         income_config = config['income']
         income_root_account = book.root_account.children(name=income_config['root_account_name'])
-        income.print_reports(income_root_account, income_config, time_delta, years, json_path, html_path)
+        report.print_reports(income_root_account, income_config, time_delta, years, json_path, html_path)
 
     # Assets reports
     if print_assets:
         assets_config = config['assets']
         assets_root_account = book.root_account.children(name=assets_config['root_account_name'])
-        assets.print_reports(assets_root_account, assets_config, time_delta, years, json_path, html_path)
+        report.print_reports(assets_root_account, assets_config, time_delta, years, json_path, html_path)
 
     # Liabilities reports
     if print_liabilities:
         liabilities_config = config['liabilities']
         liabilities_root_account = book.root_account.children(name=liabilities_config['root_account_name'])
-        liabilities.print_reports(liabilities_root_account, liabilities_config, time_delta, years, json_path, html_path)
+        report.print_reports(liabilities_root_account, liabilities_config, time_delta, years, json_path, html_path)
 
     book.close()
 

@@ -18,7 +18,8 @@
     "print_markdown": false,
     "root_account_name": "Expenses",
     "report_name_suffix": " Expenses",
-    "file_name_suffix": "_Expenses"
+    "file_name_suffix": "_Expenses",
+    "with_running_balance": false
   },
   "income": {
     "print_html": false,
@@ -26,7 +27,8 @@
     "print_markdown": false,
     "root_account_name": "Income",
     "report_name_suffix": " Income",
-    "file_name_suffix": "_Income"
+    "file_name_suffix": "_Income",
+    "with_running_balance": false
   },
   "assets": {
     "print_html": false,
@@ -34,7 +36,8 @@
     "print_markdown": false,
     "root_account_name": "Assets",
     "report_name_suffix": " Assets",
-    "file_name_suffix": "_Assets"
+    "file_name_suffix": "_Assets",
+    "with_running_balance": true
   },
   "liabilities": {
     "print_html": false,
@@ -42,6 +45,7 @@
     "print_markdown": false,
     "root_account_name": "Liabilities",
     "report_name_suffix": " Liabilities",
-    "file_name_suffix": "_Liabilities"
+    "file_name_suffix": "_Liabilities",
+    "with_running_balance": true
   }
 }
