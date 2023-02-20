@@ -24,32 +24,35 @@ def main():
     print_income = config['print_income']
     print_assets = config['print_assets']
     print_liabilities = config['print_liabilities']
+    years = config['years']
+    json_path = config['json_path']
+    html_path = config['html_path']
 
     book = piecash.open_book(gnu_cash_file, readonly=True, open_if_lock=True)
 
     # Expense reports
     if print_expense:
         expense_config = config['expense']
-        expense_root_account = book.root_account.children(name="Expenses")
-        expense.print_reports(expense_root_account, expense_config, time_delta)
+        expense_root_account = book.root_account.children(name=expense_config['root_account_name'])
+        expense.print_reports(expense_root_account, expense_config, time_delta, years, json_path, html_path)
 
     # Income reports
     if print_income:
         income_config = config['income']
-        income_root_account = book.root_account.children(name="Income")
-        income.print_reports(income_root_account, income_config, time_delta)
+        income_root_account = book.root_account.children(name=income_config['root_account_name'])
+        income.print_reports(income_root_account, income_config, time_delta, years, json_path, html_path)
 
     # Assets reports
     if print_assets:
         assets_config = config['assets']
-        assets_root_account = book.root_account.children(name="Assets")
-        assets.print_reports(assets_root_account, assets_config, time_delta)
+        assets_root_account = book.root_account.children(name=assets_config['root_account_name'])
+        assets.print_reports(assets_root_account, assets_config, time_delta, years, json_path, html_path)
 
     # Liabilities reports
     if print_liabilities:
         liabilities_config = config['liabilities']
-        liabilities_root_account = book.root_account.children(name="Liabilities")
-        liabilities.print_reports(liabilities_root_account, liabilities_config, time_delta)
+        liabilities_root_account = book.root_account.children(name=liabilities_config['root_account_name'])
+        liabilities.print_reports(liabilities_root_account, liabilities_config, time_delta, years, json_path, html_path)
 
     book.close()
 

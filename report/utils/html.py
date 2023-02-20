@@ -2,7 +2,7 @@ from utils.date import get_month
 import locale
 
 
-def print_html(path, report_name, root_account_total):
+def print_html(path, report_name, file_name, root_account_total):
     locale.setlocale(locale.LC_ALL, "en_US.UTF-8")
     text = """
 <html>
@@ -39,7 +39,7 @@ def print_html(path, report_name, root_account_total):
     </table>
 </html>
         """
-    with open(path + report_name + '.html', 'w') as file:
+    with open(path + file_name + '.html', 'w') as file:
         file.writelines(text)
 
 
