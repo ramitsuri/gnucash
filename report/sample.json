@@ -47,5 +47,13 @@
     "report_name_suffix": " Liabilities",
     "file_name_suffix": "_Liabilities",
     "with_running_balance": true
+  },
+  "networth": {
+    "print_html": false,
+    "print_json": true,
+    "print_markdown": false,
+    "report_name_suffix": " NetWorth",
+    "file_name_suffix": "_NetWorth",
+    "account_name": "Networth"
   }
 }
