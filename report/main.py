@@ -33,25 +33,28 @@ def main():
     if print_expense:
         expense_config = config['expense']
         expense_root_account = book.root_account.children(name=expense_config['root_account_name'])
-        report.print_reports(expense_root_account, expense_config, time_delta, years, json_path, html_path)
+        report.print_reports(expense_root_account, expense_config, time_delta, years, json_path, html_path,
+                             save_result=False)
 
     # Income reports
     if print_income:
         income_config = config['income']
         income_root_account = book.root_account.children(name=income_config['root_account_name'])
-        report.print_reports(income_root_account, income_config, time_delta, years, json_path, html_path)
+        report.print_reports(income_root_account, income_config, time_delta, years, json_path, html_path,
+                             save_result=False)
 
     if print_networth:
         # Assets reports
         assets_config = config['assets']
         assets_root_account = book.root_account.children(name=assets_config['root_account_name'])
-        assets = report.print_reports(assets_root_account, assets_config, time_delta, years, json_path, html_path)
+        assets = report.print_reports(assets_root_account, assets_config, time_delta, years, json_path, html_path,
+                                      save_result=True)
 
         # Liabilities reports
         liabilities_config = config['liabilities']
         liabilities_root_account = book.root_account.children(name=liabilities_config['root_account_name'])
         liabilities = report.print_reports(liabilities_root_account, liabilities_config, time_delta, years, json_path,
-                                           html_path)
+                                           html_path, save_result=True)
 
         # Networth reports
         networth_config = config['networth']

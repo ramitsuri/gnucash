@@ -19,7 +19,15 @@
     "root_account_name": "Expenses",
     "report_name_suffix": " Expenses",
     "file_name_suffix": "_Expenses",
-    "with_running_balance": false
+    "with_running_balance": false,
+    "with_filter": {
+      "report_name_suffix": " After Deduction Expenses",
+      "file_name_suffix": "_After_Deduction_Expenses",
+      "with_running_balance": false,
+      "exclude_accounts": [
+        "Expenses:Taxes"
+      ]
+    }
   },
   "income": {
     "print_html": false,
@@ -68,18 +76,12 @@
     "retirement": {
       "report_account_name": "Retirement",
       "accounts": [
-        "Assets:Investments:Spouse Retirement:401K:Contribution",
-        "Assets:Current Assets:HSA (Spouse)",
-        "Assets:Investments:Retirement:401K:Contribution",
-        "Assets:Investments:Retirement:401K (2):Contribution",
-        "Assets:Investments:Retirement:401K (3):Contribution",
-        "Assets:Current Assets:HSA",
-        "Assets:Current Assets:HSA (2)"
+        "Assets:Current Assets:HSA"
       ]
     },
     "brokerage": {
       "report_account_name": "Brokerage",
-      "accounts": ["Assets:Investments:Brokerage Account:Joint:Contribution"]
+      "accounts": ["Assets:Investments:Brokerage Account"]
     },
     "savings": {
       "report_account_name": "Savings",

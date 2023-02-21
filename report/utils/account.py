@@ -39,10 +39,11 @@ class _BalanceInfo:
 
 
 def get_totals_for_accounts(root_account, year, time_delta, filter_accounts, filter_type, with_running_balance=False):
-    if not filter_accounts:
-        root_account_info = __get_relevant_accounts(root_account)
-    else:
-        root_account_info = __get_relevant_accounts_with_filter(root_account, filter_accounts, filter_type)
+    if filter_accounts:
+        root_account = __filter_root_account(root_account, filter_accounts, filter_type)
+
+    root_account_info = __get_relevant_accounts(root_account)
+
     if with_running_balance:
         __set_monthly_running_balances_on_accounts(root_account_info, year, time_delta)
     else:
@@ -88,29 +89,43 @@ def __get_relevant_accounts(root_account):
     return account_info
 
 
-# Build _AccountInfo tree that holds PieCash Accounts.
-def __get_relevant_accounts_with_filter(root_account, filter_accounts, filter_type):
-    # A leaf account should definitely be able to be included as a child
-    if not root_account.children and not __can_include_account(root_account, filter_accounts, filter_type):
-        return None
-    children = [__get_relevant_accounts_with_filter(child, filter_accounts, filter_type) for child in
-                root_account.children]
+def __filter_root_account(root_account, filter_accounts, filter_type):
+    if filter_type == FilterType.INCLUDE:
+        return __keep_included_accounts(root_account, filter_accounts)
+    else:
+        return __remove_ignored_accounts(root_account, filter_accounts)
+
+
+def __keep_included_accounts(root_account, included_accounts):
+    if root_account.fullname in included_accounts:
+        return root_account
+    children = [__keep_included_accounts(child, included_accounts) for child in root_account.children]
     children_not_none = [child for child in children if child is not None]
+
     if not children_not_none and root_account.children:
         return None
-    account_info = _AccountInfo(root_account)
-    account_info.children = children_not_none
-    return account_info
+
+    root_account.children = children_not_none
+
+    if root_account.fullname not in included_accounts and not root_account.children:
+        return None
+
+    return root_account
 
 
-def __can_include_account(account, filter_accounts, filter_type):
-    if not filter_accounts:  # Include account if no filter_accounts provided
-        return True
+def __remove_ignored_accounts(root_account, ignored_accounts):
+    children = [__remove_ignored_accounts(child, ignored_accounts) for child in root_account.children]
+    children_not_none = [child for child in children if child is not None]
 
-    if filter_type == FilterType.INCLUDE:
-        return account.fullname in filter_accounts
-    else:
-        return account.fullname not in filter_accounts
+    if not children_not_none and root_account.children:
+        return None
+
+    root_account.children = children_not_none
+
+    if root_account.fullname in ignored_accounts:
+        return None
+
+    return root_account
 
 
 # Traverses the tree in post order and sets balances. If account has no children, balances are evaluated, if there are
