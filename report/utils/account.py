@@ -1,5 +1,6 @@
 from utils.date import get_start_date, get_end_date
 from decimal import Decimal
+from enum import Enum
 
 
 class AccountTotal:
@@ -19,6 +20,11 @@ class Balance:
         self.amount = amount  # Decimal amounts
 
 
+class FilterType(Enum):
+    INCLUDE = 1
+    EXCLUDE = 2
+
+
 class _AccountInfo:
     def __init__(self, account):
         self.account = account
@@ -32,8 +38,11 @@ class _BalanceInfo:
         self.amount = amount  # Decimal amounts
 
 
-def get_totals_for_accounts(root_account, year, time_delta, with_running_balance=False):
-    root_account_info = __get_relevant_accounts(root_account)
+def get_totals_for_accounts(root_account, year, time_delta, filter_accounts, filter_type, with_running_balance=False):
+    if not filter_accounts:
+        root_account_info = __get_relevant_accounts(root_account)
+    else:
+        root_account_info = __get_relevant_accounts_with_filter(root_account, filter_accounts, filter_type)
     if with_running_balance:
         __set_monthly_running_balances_on_accounts(root_account_info, year, time_delta)
     else:
@@ -42,28 +51,23 @@ def get_totals_for_accounts(root_account, year, time_delta, with_running_balance
     return account_total
 
 
-# TODO convert to use the tree root account
-def filter_out_and_get_totals(account_totals, exclude_parents, exclude_children):
-    totals = []
-    for account_total in account_totals:
-        if any(exclude_parent in account_total.fullname for exclude_parent in exclude_parents):
-            continue
-
-        if not account_total.children:  # children empty
-            totals.append(account_total)
-        else:
-            new_account_total = AccountTotal(account_total.name, account_total.fullname)
-            for child_total in account_total.children:
-                if any(exclude_child in child_total.fullname for exclude_child in exclude_children):
-                    continue
-                new_account_total.children.append(child_total)
-                new_account_total.total += child_total.total
-                for child_total_balance in child_total.balances:
-                    new_account_total.balances[child_total_balance.month - 1].amount += child_total_balance.amount
-
-            totals.append(new_account_total)
-
-    return totals
+def set_balances_on_parents(root_account_total):
+    for child_account_total in root_account_total.children:
+        set_balances_on_parents(child_account_total)
+    if not root_account_total.children:
+        return
+    balances = []
+    months = range(1, 13)
+    total = Decimal("0.0")
+    for month in months:
+        month_amount = Decimal("0.0")
+        for child_account_total in root_account_total.children:
+            balance = child_account_total.balances[month - 1]
+            month_amount += balance.amount
+            total += balance.amount
+        balances.append(Balance(month, month_amount))
+    root_account_total.balances = balances
+    root_account_total.total = total
 
 
 def __convert_to_account_totals(root_account_info):
@@ -82,6 +86,31 @@ def __get_relevant_accounts(root_account):
     account_info = _AccountInfo(root_account)
     account_info.children = children
     return account_info
+
+
+# Build _AccountInfo tree that holds PieCash Accounts.
+def __get_relevant_accounts_with_filter(root_account, filter_accounts, filter_type):
+    # A leaf account should definitely be able to be included as a child
+    if not root_account.children and not __can_include_account(root_account, filter_accounts, filter_type):
+        return None
+    children = [__get_relevant_accounts_with_filter(child, filter_accounts, filter_type) for child in
+                root_account.children]
+    children_not_none = [child for child in children if child is not None]
+    if not children_not_none and root_account.children:
+        return None
+    account_info = _AccountInfo(root_account)
+    account_info.children = children_not_none
+    return account_info
+
+
+def __can_include_account(account, filter_accounts, filter_type):
+    if not filter_accounts:  # Include account if no filter_accounts provided
+        return True
+
+    if filter_type == FilterType.INCLUDE:
+        return account.fullname in filter_accounts
+    else:
+        return account.fullname not in filter_accounts
 
 
 # Traverses the tree in post order and sets balances. If account has no children, balances are evaluated, if there are

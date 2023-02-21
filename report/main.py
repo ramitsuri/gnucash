@@ -4,6 +4,7 @@ import piecash
 from utils.date import to_time_delta
 import report
 import networth
+import savings
 
 
 def read_config():
@@ -21,6 +22,7 @@ def main():
     print_expense = config['print_expense']
     print_income = config['print_income']
     print_networth = config['print_networth']
+    print_savings = config['print_savings']
     years = config['years']
     json_path = config['json_path']
     html_path = config['html_path']
@@ -54,6 +56,12 @@ def main():
         # Networth reports
         networth_config = config['networth']
         networth.print_reports(liabilities, assets, networth_config, years, json_path, html_path)
+
+    # Savings reports
+    if print_savings:
+        savings_config = config['savings']
+        assets_root_account = book.root_account.children(name=savings_config['root_account_name'])
+        savings.print_reports(assets_root_account, savings_config, time_delta, years, json_path, html_path)
 
     book.close()
 

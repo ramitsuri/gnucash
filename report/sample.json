@@ -5,8 +5,8 @@
   "time_delta_hours": 4,
   "print_expense": true,
   "print_income": true,
-  "print_assets": true,
-  "print_liabilities": true,
+  "print_networth": true,
+  "print_savings": true,
   "json_path": "",
   "html_path": "",
   "years": [
@@ -54,6 +54,36 @@
     "print_markdown": false,
     "report_name_suffix": " NetWorth",
     "file_name_suffix": "_NetWorth",
-    "account_name": "Networth"
+    "report_account_name": "Networth"
+  },
+  "savings": {
+    "print_html": true,
+    "print_json": false,
+    "print_markdown": false,
+    "root_account_name": "Assets",
+    "report_name_suffix": " Savings",
+    "file_name_suffix": "_Savings",
+    "with_running_balance": false,
+    "report_account_name": "Savings",
+    "retirement": {
+      "report_account_name": "Retirement",
+      "accounts": [
+        "Assets:Investments:Spouse Retirement:401K:Contribution",
+        "Assets:Current Assets:HSA (Spouse)",
+        "Assets:Investments:Retirement:401K:Contribution",
+        "Assets:Investments:Retirement:401K (2):Contribution",
+        "Assets:Investments:Retirement:401K (3):Contribution",
+        "Assets:Current Assets:HSA",
+        "Assets:Current Assets:HSA (2)"
+      ]
+    },
+    "brokerage": {
+      "report_account_name": "Brokerage",
+      "accounts": ["Assets:Investments:Brokerage Account:Joint:Contribution"]
+    },
+    "savings": {
+      "report_account_name": "Savings",
+      "accounts": []
+    }
   }
 }

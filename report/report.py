@@ -34,7 +34,8 @@ def __print_report(root_account, year, time_delta, should_print_html, should_pri
     # |  CREDIT 1 |   500   |   200   |              |  CREDIT 1 |   500   |   700   |
     #
     # This is controlled by the with_running_balance property and should be set accordingly for Liabilities and Assets
-    totals_root = get_totals_for_accounts(root_account, year, time_delta, with_running_balance=with_running_balance)
+    totals_root = get_totals_for_accounts(root_account, year, time_delta, filter_accounts=[], filter_type=None,
+                                          with_running_balance=with_running_balance)
     report_name = str(year) + report_name_suffix
     file_name = str(year) + file_name_suffix
 

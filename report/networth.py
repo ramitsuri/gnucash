@@ -10,7 +10,7 @@ def print_reports(liabilities_root_account, assets_root_account, config, years, 
     should_print_markdown = config['print_markdown']
     file_name_suffix = config['file_name_suffix']
     report_name_suffix = config['report_name_suffix']
-    account_name = config['account_name']
+    account_name = config['report_account_name']
 
     for year in years:
         assets_balances = assets_root_account[year].balances
