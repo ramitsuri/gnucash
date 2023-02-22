@@ -28,6 +28,10 @@ def print_reports(root_account, config, time_delta, years, json_path, html_path,
 
     filter_accounts = with_filter['exclude_accounts']
     filter_type = FilterType.EXCLUDE
+    file_name_suffix = with_filter['file_name_suffix']
+    report_name_suffix = with_filter['report_name_suffix']
+    with_running_balance = with_filter['with_running_balance']
+
     for year in years:
         totals_root = __print_report(root_account, year, time_delta, filter_accounts, filter_type,
                                      should_print_html, should_print_json, should_print_markdown, json_path, html_path,
