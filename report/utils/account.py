@@ -1,4 +1,4 @@
-from utils.date import get_start_date, get_end_date
+from utils.date import get_start_date, get_end_date, get_current_month
 from decimal import Decimal
 from enum import Enum
 
@@ -48,7 +48,7 @@ def get_totals_for_accounts(root_account, year, time_delta, filter_accounts, fil
         __set_monthly_running_balances_on_accounts(root_account_info, year, time_delta)
     else:
         __set_monthly_balances_on_accounts(root_account_info, year, time_delta)
-    account_total = __convert_to_account_totals(root_account_info)
+    account_total = __convert_to_account_totals(root_account_info, with_running_balance, time_delta)
     return account_total
 
 
@@ -71,14 +71,20 @@ def set_balances_on_parents(root_account_total):
     root_account_total.total = total
 
 
-def __convert_to_account_totals(root_account_info):
-    children = [__convert_to_account_totals(child) for child in root_account_info.children]
-    total = AccountTotal(root_account_info.account.name, root_account_info.account.fullname)
-    total.children = children
+def __convert_to_account_totals(root_account_info, with_running_balance, time_delta):
+    children = [__convert_to_account_totals(child, with_running_balance, time_delta) for child in root_account_info.children]
+    account_total = AccountTotal(root_account_info.account.name, root_account_info.account.fullname)
+    account_total.children = children
+    total = Decimal("0.0")
     for balance_info in root_account_info.balance_infos:
-        total.balances[balance_info.month - 1].amount = balance_info.amount
-        total.total += balance_info.amount
-    return total
+        account_total.balances[balance_info.month - 1].amount = balance_info.amount
+        total += balance_info.amount
+    if with_running_balance:
+
+        account_total.total = account_total.balances[get_current_month(time_delta) - 1].amount
+    else:
+        account_total.total = total
+    return account_total
 
 
 # Build _AccountInfo tree that holds PieCash Accounts.
@@ -186,8 +192,12 @@ def __calculate_and_get_balances_for_parent(parent_account_info):
 def __calculate_and_get_running_balances(account_info, year, time_delta):
     balance_infos = []
     months = range(1, 13)
+    current_month = get_current_month(time_delta)
     for month in months:
         end_of_month_date = get_end_date(year, month, time_delta)
-        end_of_month_balance = account_info.account.get_balance(at_date=end_of_month_date)
+        if month > current_month:
+            end_of_month_balance = Decimal("0.0")
+        else:
+            end_of_month_balance = account_info.account.get_balance(at_date=end_of_month_date)
         balance_infos.append(_BalanceInfo(month, end_of_month_balance))
     return balance_infos

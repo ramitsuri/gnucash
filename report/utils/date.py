@@ -22,3 +22,7 @@ def to_time_delta(hours):
 
 def current_utc():
     return datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+
+def get_current_month(time_delta):
+    return datetime.now(timezone(time_delta)).month
