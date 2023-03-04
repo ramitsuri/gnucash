@@ -1,4 +1,4 @@
-from utils.date import get_start_date, get_end_date, get_current_month
+from utils.date import get_start_date, get_end_date, get_current_month, is_future_month
 from decimal import Decimal
 from enum import Enum
 
@@ -80,7 +80,6 @@ def __convert_to_account_totals(root_account_info, with_running_balance, time_de
         account_total.balances[balance_info.month - 1].amount = balance_info.amount
         total += balance_info.amount
     if with_running_balance:
-
         account_total.total = account_total.balances[get_current_month(time_delta) - 1].amount
     else:
         account_total.total = total
@@ -192,10 +191,9 @@ def __calculate_and_get_balances_for_parent(parent_account_info):
 def __calculate_and_get_running_balances(account_info, year, time_delta):
     balance_infos = []
     months = range(1, 13)
-    current_month = get_current_month(time_delta)
     for month in months:
         end_of_month_date = get_end_date(year, month, time_delta)
-        if month > current_month:
+        if is_future_month(year, month, time_delta):
             end_of_month_balance = Decimal("0.0")
         else:
             end_of_month_balance = account_info.account.get_balance(at_date=end_of_month_date)
