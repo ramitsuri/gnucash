@@ -30,11 +30,9 @@ def get_current_month(time_delta):
 
 def is_future_month(year, month, time_delta):
     now = datetime.now(timezone(time_delta))
-    if now.year > year:
+    if year > now.year:
         return True
-    if now.year < year:
+    if year < now.year:
         return False
-    if now.month > month:
-        return True
+    return month > now.month
 
-    return False
