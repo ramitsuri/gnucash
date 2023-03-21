@@ -7,6 +7,7 @@
   "print_income": true,
   "print_networth": true,
   "print_savings": true,
+  "print_transactions": true,
   "json_path": "",
   "html_path": "",
   "years": [
@@ -87,5 +88,9 @@
       "report_account_name": "Savings",
       "accounts": []
     }
+  },
+  "transactions": {
+    "path": "transactions/",
+    "current_and_last_month_only": false
   }
 }

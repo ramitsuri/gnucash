@@ -1,7 +1,7 @@
 from utils.account import get_totals_for_accounts, set_balances_on_parents, FilterType, AccountTotal
 from utils.md import print_markdown
 from utils.html import print_html
-from utils.json_ut import print_json
+from utils.json_ut import print_report
 
 
 def print_reports(root_account, config, time_delta, years, json_path, html_path):
@@ -54,7 +54,7 @@ def print_reports(root_account, config, time_delta, years, json_path, html_path)
         if should_print_html:
             print_html(html_path, report_name, file_name, report_account_total)
         if should_print_json:
-            print_json(json_path, report_name, file_name, report_account_total)
+            print_report(json_path, report_name, file_name, report_account_total)
         if should_print_markdown:
             print_markdown(report_name, report_account_total)
 

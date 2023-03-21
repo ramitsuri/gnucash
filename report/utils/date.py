@@ -24,8 +24,19 @@ def current_utc():
     return datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
+def get_current_year(time_delta):
+    return datetime.now(timezone(time_delta)).year
+
+
 def get_current_month(time_delta):
     return datetime.now(timezone(time_delta)).month
+
+
+def get_previous_month(time_delta):
+    previous_month = get_current_month(time_delta) - 1
+    if previous_month == 0:
+        previous_month = 12
+    return previous_month
 
 
 def is_future_month(year, month, time_delta):

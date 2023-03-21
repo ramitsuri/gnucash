@@ -1,6 +1,6 @@
 from utils.md import print_markdown
 from utils.html import print_html
-from utils.json_ut import print_json
+from utils.json_ut import print_report
 from utils.account import Balance, AccountTotal
 
 
@@ -37,6 +37,6 @@ def __print_report(totals_root, year, should_print_html, should_print_json, shou
     if should_print_html:
         print_html(html_path, report_name, file_name, totals_root)
     if should_print_json:
-        print_json(json_path, report_name, file_name, totals_root)
+        print_report(json_path, report_name, file_name, totals_root)
     if should_print_markdown:
         print_markdown(report_name, totals_root)
