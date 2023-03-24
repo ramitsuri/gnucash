@@ -31,6 +31,10 @@ def main():
 
     book = piecash.open_book(gnu_cash_file, readonly=True, open_if_lock=True)
 
+    account_names = {}
+    for account in book.accounts:
+        account_names[account.guid] = account.fullname
+
     # Expense reports
     if print_expense:
         expense_config = config['expense']
@@ -70,8 +74,7 @@ def main():
 
     if print_transactions:
         tx_config = config['transactions']
-        tx.print_transactions(book.transactions, years, time_delta, tx_config, json_path)
-
+        tx.print_transactions(book.transactions, account_names, years, time_delta, tx_config, json_path)
     book.close()
 
 

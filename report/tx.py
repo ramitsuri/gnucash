@@ -12,7 +12,7 @@ class Transaction:
         self.description = description
 
 
-def print_transactions(transactions, years, time_delta, config, json_path):
+def print_transactions(transactions, account_names, years, time_delta, config, json_path):
     if config['current_and_last_month_only']:
         years = [get_current_year(time_delta)]
         months = [get_previous_month(time_delta), get_current_month(time_delta)]
@@ -22,12 +22,12 @@ def print_transactions(transactions, years, time_delta, config, json_path):
     for year in years:
         path = json_path + config['path'] + str(year) + '/'
         for month in months:
-            transactions_for_month = __print_transactions(transactions, year, month)
+            transactions_for_month = __print_transactions(transactions, account_names, year, month)
             file_name = str(month).zfill(2)
             utils.json_ut.print_transactions(path, file_name, transactions_for_month)
 
 
-def __print_transactions(transactions, year, month):
+def __print_transactions(transactions, account_names, year, month):
     result = []
     for transaction in transactions:
         if transaction.post_date.year != year:
@@ -41,10 +41,18 @@ def __print_transactions(transactions, year, month):
         for split in transaction.splits:
             if split.is_debit:
                 amount += split.value
-                to_accounts.append(split.account.fullname)
+                to_accounts.append(__get_account_name(split.account, account_names))
+
             else:
-                from_accounts.append(split.account.fullname)
+                from_accounts.append(__get_account_name(split.account, account_names))
 
         result.append(Transaction(transaction.post_date, amount, from_accounts, to_accounts, transaction.description))
 
     return result
+
+
+def __get_account_name(account, account_names):
+    if not account.fullname:
+        return account_names[account.guid]
+    else:
+        return account.fullname
