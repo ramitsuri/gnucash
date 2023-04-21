@@ -4,12 +4,17 @@ import utils.json_ut
 
 
 class Transaction:
-    def __init__(self, date, amount, from_accounts, to_accounts, description):
+    def __init__(self, date, total, splits, description):
         self.date = date
-        self.amount = amount
-        self.from_accounts = from_accounts
-        self.to_accounts = to_accounts
+        self.total = total
+        self.splits = splits
         self.description = description
+
+
+class Split:
+    def __init__(self, amount, account):
+        self.amount = amount
+        self.account = account
 
 
 def print_transactions(transactions, account_names, years, time_delta, config, json_path):
@@ -35,18 +40,16 @@ def __print_transactions(transactions, account_names, year, month):
         if transaction.post_date.month != month:
             continue
 
-        to_accounts = []
-        from_accounts = []
-        amount = Decimal("0.0")
+        splits = []
+        total = Decimal("0.0")
         for split in transaction.splits:
             if split.is_debit:
-                amount += split.value
-                to_accounts.append(__get_account_name(split.account, account_names))
-
+                total += split.value
+                splits.append(Split(split.value, __get_account_name(split.account, account_names)))
             else:
-                from_accounts.append(__get_account_name(split.account, account_names))
+                splits.append(Split(split.value, __get_account_name(split.account, account_names)))
 
-        result.append(Transaction(transaction.post_date, amount, from_accounts, to_accounts, transaction.description))
+        result.append(Transaction(transaction.post_date, total, splits, transaction.description))
 
     return result
 
