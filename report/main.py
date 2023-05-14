@@ -6,6 +6,7 @@ import report
 import networth
 import savings
 import tx
+import tx_groups
 
 
 def read_config():
@@ -25,6 +26,7 @@ def main():
     print_networth = config['print_networth']
     print_savings = config['print_savings']
     print_transactions = config['print_transactions']
+    print_transaction_groups = config['print_transaction_groups']
     years = config['years']
     json_path = config['json_path']
     html_path = config['html_path']
@@ -72,9 +74,16 @@ def main():
         assets_root_account = book.root_account.children(name=savings_config['root_account_name'])
         savings.print_reports(assets_root_account, savings_config, time_delta, years, json_path, html_path)
 
+    # Transactions
     if print_transactions:
         tx_config = config['transactions']
         tx.print_transactions(book.transactions, account_names, years, time_delta, tx_config, json_path)
+
+    # Transaction Groups
+    if print_transaction_groups:
+        tx_groups_config = config['transaction_groups']
+        tx_groups.print_transaction_groups(book.transactions, tx_groups_config, json_path)
+
     book.close()
 
 

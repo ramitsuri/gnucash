@@ -22,6 +22,15 @@ def print_transactions(path, file_name, transactions):
         file.writelines(json_string)
 
 
+def print_transaction_groups(path, file_name, transaction_groups):
+    jsonpickle.handlers.registry.register(Decimal, _DecimalHandler)
+    time = current_utc()
+    _transaction_groups = _TransactionGroups(time, transaction_groups)
+    json_string = jsonpickle.encode(_transaction_groups, unpicklable=False)
+    with __safe_open(path + file_name + '.json') as file:
+        file.writelines(json_string)
+
+
 class _Report:
     def __init__(self, name, time, account_total):
         self.name = name
@@ -33,6 +42,12 @@ class _Transactions:
     def __init__(self, time, transactions):
         self.time = time
         self.transactions = transactions
+
+
+class _TransactionGroups:
+    def __init__(self, time, transaction_groups):
+        self.time = time
+        self.transaction_groups = transaction_groups
 
 
 class _DecimalHandler(jsonpickle.handlers.BaseHandler):

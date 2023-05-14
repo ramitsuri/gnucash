@@ -4,11 +4,12 @@ import utils.json_ut
 
 
 class Transaction:
-    def __init__(self, date, total, splits, description):
+    def __init__(self, date, total, splits, description, num):
         self.date = date
         self.total = total
         self.splits = splits
         self.description = description
+        self.num = num
 
 
 class Split:
@@ -49,7 +50,7 @@ def __print_transactions(transactions, account_names, year, month):
             else:
                 splits.append(Split(split.value, __get_account_name(split.account, account_names)))
 
-        result.append(Transaction(transaction.post_date, total, splits, transaction.description))
+        result.append(Transaction(transaction.post_date, total, splits, transaction.description, transaction.num))
 
     return result
 
