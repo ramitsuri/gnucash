@@ -2,12 +2,10 @@ from utils.md import print_markdown
 from utils.html import print_html
 from utils.json_ut import print_report
 from utils.account import Balance, AccountTotal
+from utils.print_type import PrintType
 
 
-def print_reports(liabilities_root_account, assets_root_account, config, years, json_path, html_path):
-    should_print_html = config['print_html']
-    should_print_json = config['print_json']
-    should_print_markdown = config['print_markdown']
+def print_reports(print_types, liabilities_root_account, assets_root_account, config, years, json_path, html_path):
     file_name_suffix = config['file_name_suffix']
     report_name_suffix = config['report_name_suffix']
     account_name = config['report_account_name']
@@ -25,18 +23,17 @@ def print_reports(liabilities_root_account, assets_root_account, config, years, 
         networth_account_total = AccountTotal(account_name, account_name)
         networth_account_total.balances = networth_balances_for_year
 
-        __print_report(networth_account_total, year, should_print_html, should_print_json, should_print_markdown,
-                       json_path, html_path, file_name_suffix, report_name_suffix)
+        __print_report(networth_account_total, year, print_types, json_path, html_path, file_name_suffix,
+                       report_name_suffix)
 
 
-def __print_report(totals_root, year, should_print_html, should_print_json, should_print_markdown,
-                   json_path, html_path, file_name_suffix, report_name_suffix):
+def __print_report(totals_root, year, print_types, json_path, html_path, file_name_suffix, report_name_suffix):
     report_name = str(year) + report_name_suffix
     file_name = str(year) + file_name_suffix
 
-    if should_print_html:
+    if PrintType.HTML in print_types:
         print_html(html_path, report_name, file_name, totals_root)
-    if should_print_json:
+    if PrintType.JSON in print_types:
         print_report(json_path, report_name, file_name, totals_root)
-    if should_print_markdown:
+    if PrintType.MD in print_types:
         print_markdown(report_name, totals_root)

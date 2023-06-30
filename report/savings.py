@@ -2,12 +2,10 @@ from utils.account import get_totals_for_accounts, set_balances_on_parents, Filt
 from utils.md import print_markdown
 from utils.html import print_html
 from utils.json_ut import print_report
+from utils.print_type import PrintType
 
 
-def print_reports(root_account, config, time_delta, years, json_path, html_path):
-    should_print_html = config['print_html']
-    should_print_json = config['print_json']
-    should_print_markdown = config['print_markdown']
+def print_reports(print_types, root_account, config, time_delta, years, json_path, html_path):
     file_name_suffix = config['file_name_suffix']
     report_name_suffix = config['report_name_suffix']
     with_running_balance = config['with_running_balance']
@@ -51,11 +49,11 @@ def print_reports(root_account, config, time_delta, years, json_path, html_path)
         report_name = str(year) + report_name_suffix
         file_name = str(year) + file_name_suffix
 
-        if should_print_html:
+        if PrintType.HTML in print_types:
             print_html(html_path, report_name, file_name, report_account_total)
-        if should_print_json:
+        if PrintType.JSON in print_types:
             print_report(json_path, report_name, file_name, report_account_total)
-        if should_print_markdown:
+        if PrintType.MD in print_types:
             print_markdown(report_name, report_account_total)
 
 

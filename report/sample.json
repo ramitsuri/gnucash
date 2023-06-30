@@ -3,21 +3,13 @@
   "file": "file.gnucash",
   "//time_delta_hours": "Duration in hours between your time zone and UTC. Ex +4 hours for America/New_York",
   "time_delta_hours": 4,
-  "print_expense": true,
-  "print_income": true,
-  "print_networth": true,
-  "print_savings": true,
-  "print_transactions": true,
-  "print_transaction_groups": true,
   "json_path": "",
   "html_path": "",
   "years": [
     2023
   ],
+  "print_types": ["h", "j"],
   "expense": {
-    "print_html": false,
-    "print_json": true,
-    "print_markdown": false,
     "root_account_name": "Expenses",
     "report_name_suffix": " Expenses",
     "file_name_suffix": "_Expenses",
@@ -32,44 +24,29 @@
     }
   },
   "income": {
-    "print_html": false,
-    "print_json": true,
-    "print_markdown": false,
     "root_account_name": "Income",
     "report_name_suffix": " Income",
     "file_name_suffix": "_Income",
     "with_running_balance": false
   },
   "assets": {
-    "print_html": false,
-    "print_json": true,
-    "print_markdown": false,
     "root_account_name": "Assets",
     "report_name_suffix": " Assets",
     "file_name_suffix": "_Assets",
     "with_running_balance": true
   },
   "liabilities": {
-    "print_html": false,
-    "print_json": true,
-    "print_markdown": false,
     "root_account_name": "Liabilities",
     "report_name_suffix": " Liabilities",
     "file_name_suffix": "_Liabilities",
     "with_running_balance": true
   },
   "networth": {
-    "print_html": false,
-    "print_json": true,
-    "print_markdown": false,
     "report_name_suffix": " NetWorth",
     "file_name_suffix": "_NetWorth",
     "report_account_name": "Networth"
   },
   "savings": {
-    "print_html": true,
-    "print_json": false,
-    "print_markdown": false,
     "root_account_name": "Assets",
     "report_name_suffix": " Savings",
     "file_name_suffix": "_Savings",
