@@ -1,6 +1,6 @@
-from report.utils.date import get_current_year, get_current_month, get_previous_year
+from utils.date import get_current_year, get_current_month, get_previous_year
 from decimal import Decimal
-from report.utils.json_ut import print_miscellaneous
+from utils.json_ut import print_miscellaneous
 
 
 class Miscellaneous:

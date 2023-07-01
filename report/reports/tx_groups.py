@@ -1,5 +1,5 @@
 from decimal import Decimal
-from report.utils import json_ut
+from utils import json_ut
 
 
 class TransactionGroup:

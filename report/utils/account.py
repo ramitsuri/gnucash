@@ -1,4 +1,4 @@
-from report.utils.date import get_start_date, get_end_date, get_current_month, is_future_month
+from utils.date import get_start_date, get_end_date, get_current_month, is_future_month
 from decimal import Decimal
 from enum import Enum
 

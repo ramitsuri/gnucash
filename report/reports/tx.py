@@ -1,6 +1,6 @@
 from decimal import Decimal
-from report.utils.date import get_current_year, get_current_month, get_previous_month
-from report.utils import json_ut
+from utils.date import get_current_year, get_current_month, get_previous_month
+from utils import json_ut
 
 
 class Transaction:

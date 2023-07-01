@@ -2,10 +2,9 @@ import json
 import piecash
 
 from utils.date import to_time_delta
-from report.reports import savings, general, networth, tx, tx_groups
+from reports import savings, general, networth, tx, tx_groups, miscellaneous
 from utils.print_type import PrintType
 from utils.account_type import AccountType
-from report.reports import miscellaneous
 
 
 def read_config():

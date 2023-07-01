@@ -1,4 +1,4 @@
-from report.utils.date import get_month
+from utils.date import get_month
 import locale
 
 
