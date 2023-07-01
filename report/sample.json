@@ -12,11 +12,9 @@
   "expense": {
     "root_account_name": "Expenses",
     "report_name_suffix": " Expenses",
-    "file_name_suffix": "_Expenses",
     "with_running_balance": false,
     "with_filter": {
       "report_name_suffix": " After Deduction Expenses",
-      "file_name_suffix": "_After_Deduction_Expenses",
       "with_running_balance": false,
       "exclude_accounts": [
         "Expenses:Taxes"
@@ -26,19 +24,16 @@
   "income": {
     "root_account_name": "Income",
     "report_name_suffix": " Income",
-    "file_name_suffix": "_Income",
     "with_running_balance": false
   },
   "assets": {
     "root_account_name": "Assets",
     "report_name_suffix": " Assets",
-    "file_name_suffix": "_Assets",
     "with_running_balance": true
   },
   "liabilities": {
     "root_account_name": "Liabilities",
     "report_name_suffix": " Liabilities",
-    "file_name_suffix": "_Liabilities",
     "with_running_balance": true
   },
   "networth": {

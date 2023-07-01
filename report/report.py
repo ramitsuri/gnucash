@@ -3,15 +3,16 @@ from utils.md import print_markdown
 from utils.html import print_html
 from utils.json_ut import print_report
 from utils.print_type import PrintType
+from utils.account_type import AccountType
 
 
-def print_reports(print_types, root_account, config, time_delta, years, json_path, html_path, save_result):
-    file_name_suffix = config['file_name_suffix']
+def print_reports(account_type, print_types, root_account, config, time_delta, years, json_path, html_path, save_result):
     report_name_suffix = config['report_name_suffix']
     with_running_balance = config['with_running_balance']
 
     result = {}
 
+    file_name_suffix = __report_file_name_suffix(account_type, False)
     for year in years:
         totals_root = __print_report(root_account, year, time_delta, [], None, print_types, json_path, html_path,
                                      file_name_suffix, report_name_suffix, with_running_balance)
@@ -25,7 +26,7 @@ def print_reports(print_types, root_account, config, time_delta, years, json_pat
 
     filter_accounts = with_filter['exclude_accounts']
     filter_type = FilterType.EXCLUDE
-    file_name_suffix = with_filter['file_name_suffix']
+    file_name_suffix = __report_file_name_suffix(account_type, False)
     report_name_suffix = with_filter['report_name_suffix']
     with_running_balance = with_filter['with_running_balance']
 
@@ -63,3 +64,20 @@ def __print_report(root_account, year, time_delta, filter_accounts, filter_type,
         print_markdown(report_name, totals_root)
 
     return totals_root
+
+
+def __report_file_name_suffix(account_type, for_exclusion):
+    if account_type == AccountType.EXPENSE:
+        if for_exclusion:
+            return "_After_Deduction_Expenses"
+        else:
+            return "_Expenses"
+
+    if account_type == AccountType.INCOME:
+        return "_Income"
+
+    if account_type == AccountType.ASSETS:
+        return "_Assets"
+
+    if account_type == AccountType.LIABILITY:
+        return "_Liabilities"

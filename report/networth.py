@@ -6,7 +6,7 @@ from utils.print_type import PrintType
 
 
 def print_reports(print_types, liabilities_root_account, assets_root_account, config, years, json_path, html_path):
-    file_name_suffix = config['file_name_suffix']
+    file_name_suffix = "_NetWorth"
     report_name_suffix = config['report_name_suffix']
     account_name = config['report_account_name']
 

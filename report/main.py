@@ -8,6 +8,7 @@ import savings
 import tx
 import tx_groups
 from utils.print_type import PrintType
+from utils.account_type import AccountType
 
 
 def read_config():
@@ -35,26 +36,26 @@ def main():
     # Expense reports
     expense_config = config['expense']
     expense_root_account = book.root_account.children(name=expense_config['root_account_name'])
-    report.print_reports(print_types, expense_root_account, expense_config, time_delta, years, json_path, html_path,
-                         save_result=False)
+    report.print_reports(AccountType.EXPENSE, print_types, expense_root_account, expense_config, time_delta, years,
+                         json_path, html_path, save_result=False)
 
     # Income reports
     income_config = config['income']
     income_root_account = book.root_account.children(name=income_config['root_account_name'])
-    report.print_reports(print_types, income_root_account, income_config, time_delta, years, json_path, html_path,
-                         save_result=False)
+    report.print_reports(AccountType.INCOME, print_types, income_root_account, income_config, time_delta, years,
+                         json_path, html_path, save_result=False)
 
     # Assets reports
     assets_config = config['assets']
     assets_root_account = book.root_account.children(name=assets_config['root_account_name'])
-    assets = report.print_reports(print_types, assets_root_account, assets_config, time_delta, years, json_path,
-                                  html_path, save_result=True)
+    assets = report.print_reports(AccountType.ASSETS, print_types, assets_root_account, assets_config, time_delta,
+                                  years, json_path, html_path, save_result=True)
 
     # Liabilities reports
     liabilities_config = config['liabilities']
     liabilities_root_account = book.root_account.children(name=liabilities_config['root_account_name'])
-    liabilities = report.print_reports(print_types, liabilities_root_account, liabilities_config, time_delta, years,
-                                       json_path, html_path, save_result=True)
+    liabilities = report.print_reports(AccountType.LIABILITY, print_types, liabilities_root_account, liabilities_config,
+                                       time_delta, years, json_path, html_path, save_result=True)
 
     # Networth reports
     networth_config = config['networth']

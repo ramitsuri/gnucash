@@ -6,7 +6,7 @@ from utils.print_type import PrintType
 
 
 def print_reports(print_types, root_account, config, time_delta, years, json_path, html_path):
-    file_name_suffix = config['file_name_suffix']
+    file_name_suffix = "_Savings"
     report_name_suffix = config['report_name_suffix']
     with_running_balance = config['with_running_balance']
 
