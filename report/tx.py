@@ -26,7 +26,7 @@ def print_transactions(transactions, account_names, years, time_delta, config, j
         months = [*range(1, 13)]
 
     for year in years:
-        path = json_path + config['path'] + str(year) + '/'
+        path = json_path + "transactions/" + str(year) + '/'
         for month in months:
             transactions_for_month = __print_transactions(transactions, account_names, year, month)
             file_name = str(month).zfill(2)

@@ -3,8 +3,6 @@
   "file": "file.gnucash",
   "//time_delta_hours": "Duration in hours between your time zone and UTC. Ex +4 hours for America/New_York",
   "time_delta_hours": 4,
-  "json_path": "",
-  "html_path": "",
   "years": [
     2023
   ],
@@ -38,13 +36,11 @@
   },
   "networth": {
     "report_name_suffix": " NetWorth",
-    "file_name_suffix": "_NetWorth",
     "report_account_name": "Networth"
   },
   "savings": {
     "root_account_name": "Assets",
     "report_name_suffix": " Savings",
-    "file_name_suffix": "_Savings",
     "with_running_balance": false,
     "report_account_name": "Savings",
     "retirement": {
@@ -63,7 +59,6 @@
     }
   },
   "transactions": {
-    "path": "transactions/",
     "current_and_last_month_only": false
   },
   "transaction_groups" : [

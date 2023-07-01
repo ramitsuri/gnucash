@@ -23,9 +23,10 @@ def main():
     gnu_cash_file = config['file']
     time_delta = to_time_delta(config['time_delta_hours'])
     years = config['years']
-    json_path = config['json_path']
-    html_path = config['html_path']
     print_types = list(map(lambda x: PrintType(x), config['print_types']))
+
+    json_path = "output/json/"
+    html_path = "output/html/"
 
     book = piecash.open_book(gnu_cash_file, readonly=True, open_if_lock=True)
 
