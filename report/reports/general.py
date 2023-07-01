@@ -1,9 +1,9 @@
-from utils.account import get_totals_for_accounts, FilterType
-from utils.md import print_markdown
-from utils.html import print_html
-from utils.json_ut import print_report
-from utils.print_type import PrintType
-from utils.account_type import AccountType
+from report.utils.account import get_totals_for_accounts, FilterType
+from report.utils.md import print_markdown
+from report.utils.html import print_html
+from report.utils.json_ut import print_report
+from report.utils.print_type import PrintType
+from report.utils.account_type import AccountType
 
 
 def print_reports(account_type, print_types, root_account, config, time_delta, years, json_path, html_path, save_result):
@@ -26,7 +26,7 @@ def print_reports(account_type, print_types, root_account, config, time_delta, y
 
     filter_accounts = with_filter['exclude_accounts']
     filter_type = FilterType.EXCLUDE
-    file_name_suffix = __report_file_name_suffix(account_type, False)
+    file_name_suffix = __report_file_name_suffix(account_type, True)
     report_name_suffix = with_filter['report_name_suffix']
     with_running_balance = with_filter['with_running_balance']
 
@@ -67,17 +67,17 @@ def __print_report(root_account, year, time_delta, filter_accounts, filter_type,
 
 
 def __report_file_name_suffix(account_type, for_exclusion):
-    if account_type == AccountType.EXPENSE:
+    if account_type.value == AccountType.EXPENSE.value:
         if for_exclusion:
             return "_After_Deduction_Expenses"
         else:
             return "_Expenses"
 
-    if account_type == AccountType.INCOME:
+    if account_type.value == AccountType.INCOME.value:
         return "_Income"
 
-    if account_type == AccountType.ASSETS:
+    if account_type.value == AccountType.ASSETS.value:
         return "_Assets"
 
-    if account_type == AccountType.LIABILITY:
+    if account_type.value == AccountType.LIABILITY.value:
         return "_Liabilities"

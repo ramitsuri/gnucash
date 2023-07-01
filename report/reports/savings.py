@@ -1,8 +1,8 @@
-from utils.account import get_totals_for_accounts, set_balances_on_parents, FilterType, AccountTotal
-from utils.md import print_markdown
-from utils.html import print_html
-from utils.json_ut import print_report
-from utils.print_type import PrintType
+from report.utils.account import get_totals_for_accounts, set_balances_on_parents, FilterType, AccountTotal
+from report.utils.md import print_markdown
+from report.utils.html import print_html
+from report.utils.json_ut import print_report
+from report.utils.print_type import PrintType
 
 
 def print_reports(print_types, root_account, config, time_delta, years, json_path, html_path):

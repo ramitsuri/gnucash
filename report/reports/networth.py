@@ -1,8 +1,8 @@
-from utils.md import print_markdown
-from utils.html import print_html
-from utils.json_ut import print_report
-from utils.account import Balance, AccountTotal
-from utils.print_type import PrintType
+from report.utils.md import print_markdown
+from report.utils.html import print_html
+from report.utils.json_ut import print_report
+from report.utils.account import Balance, AccountTotal
+from report.utils.print_type import PrintType
 
 
 def print_reports(print_types, liabilities_root_account, assets_root_account, config, years, json_path, html_path):

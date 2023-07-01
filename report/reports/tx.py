@@ -1,6 +1,6 @@
 from decimal import Decimal
-from utils.date import get_current_year, get_current_month, get_previous_month
-import utils.json_ut
+from report.utils.date import get_current_year, get_current_month, get_previous_month
+from report.utils import json_ut
 
 
 class Transaction:
@@ -30,7 +30,7 @@ def print_transactions(transactions, account_names, years, time_delta, config, j
         for month in months:
             transactions_for_month = __print_transactions(transactions, account_names, year, month)
             file_name = str(month).zfill(2)
-            utils.json_ut.print_transactions(path, file_name, transactions_for_month)
+            json_ut.print_transactions(path, file_name, transactions_for_month)
 
 
 def __print_transactions(transactions, account_names, year, month):

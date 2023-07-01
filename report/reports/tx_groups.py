@@ -1,5 +1,5 @@
 from decimal import Decimal
-import utils.json_ut
+from report.utils import json_ut
 
 
 class TransactionGroup:
@@ -23,7 +23,7 @@ def print_transaction_groups(transactions, config, json_path):
 
     path = json_path
     file_name = "TransactionGroups"
-    utils.json_ut.print_transaction_groups(path, file_name, list(transaction_groups.values()))
+    json_ut.print_transaction_groups(path, file_name, list(transaction_groups.values()))
 
 
 def __get_transaction_amount(transaction):
