@@ -1,4 +1,4 @@
-from utils.date import get_start_date, get_end_date, get_current_month, is_future_month
+from report.utils.date import get_start_date, get_end_date, get_current_month, is_future_month
 from decimal import Decimal
 from enum import Enum
 
@@ -38,6 +38,7 @@ class _BalanceInfo:
         self.amount = amount  # Decimal amounts
 
 
+# Returns a tree of AccountTotal
 def get_totals_for_accounts(root_account, year, time_delta, filter_accounts, filter_type, with_running_balance=False):
     if filter_accounts:
         root_account = __filter_root_account(root_account, filter_accounts, filter_type)
@@ -71,6 +72,7 @@ def set_balances_on_parents(root_account_total):
     root_account_total.total = total
 
 
+# Returns a tree of AccountTotal
 def __convert_to_account_totals(root_account_info, with_running_balance, time_delta):
     children = [__convert_to_account_totals(child, with_running_balance, time_delta) for child in root_account_info.children]
     account_total = AccountTotal(root_account_info.account.name, root_account_info.account.fullname)

@@ -1,6 +1,6 @@
 import jsonpickle
 from decimal import Decimal
-from utils.date import current_utc
+from report.utils.date import current_utc
 import os, os.path
 
 
@@ -31,6 +31,15 @@ def print_transaction_groups(path, file_name, transaction_groups):
         file.writelines(json_string)
 
 
+def print_miscellaneous(path, file_name, miscellaneous):
+    jsonpickle.handlers.registry.register(Decimal, _DecimalHandler)
+    time = current_utc()
+    _miscellaneous = _Miscellaneous(time, miscellaneous)
+    json_string = jsonpickle.encode(_miscellaneous, unpicklable=False)
+    with __safe_open(path + file_name + '.json') as file:
+        file.writelines(json_string)
+
+
 class _Report:
     def __init__(self, name, time, account_total):
         self.name = name
@@ -48,6 +57,12 @@ class _TransactionGroups:
     def __init__(self, time, transaction_groups):
         self.time = time
         self.transaction_groups = transaction_groups
+
+
+class _Miscellaneous:
+    def __init__(self, time, miscellaneous):
+        self.time = time
+        self.miscellaneous = miscellaneous
 
 
 class _DecimalHandler(jsonpickle.handlers.BaseHandler):

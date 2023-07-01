@@ -72,5 +72,43 @@
       "identifier": "Trip2023",
       "display_name": "Vacation 2023"
     }
-  ]
+  ],
+  "miscellaneous_report": {
+    "current_year_accounts": {
+      "assets": [
+        {
+          "name": "Assets:Current Assets:Checking",
+          "display_name": "Checking",
+          "current_month": true
+        },
+        {
+          "name": "Assets:Current Assets:Cash in Wallet",
+          "display_name": "Cash",
+          "current_month": true
+        },
+        {
+          "name": "Assets:Investments:Retirement:401K:Contribution",
+          "display_name": "401K Ramit",
+          "current_month": false
+        }
+      ],
+      "liability": [
+        {
+          "name": "Liabilities:Credit Card:CC1",
+          "display_name": "CC1",
+          "current_month": true
+        },
+        {
+          "name": "Liabilities:Credit Card:CC2",
+          "display_name": "CC2",
+          "current_month": true
+        }
+      ]
+    },
+    "expense_savings": {
+      "income_accounts_to_exclude": [
+        "Income:Investment Gains"
+      ]
+    }
+  }
 }

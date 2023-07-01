@@ -28,6 +28,10 @@ def get_current_year(time_delta):
     return datetime.now(timezone(time_delta)).year
 
 
+def get_previous_year(time_delta):
+    return get_current_year(time_delta) - 1
+
+
 def get_current_month(time_delta):
     return datetime.now(timezone(time_delta)).month
 

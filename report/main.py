@@ -5,6 +5,7 @@ from utils.date import to_time_delta
 from report.reports import savings, general, networth, tx, tx_groups
 from utils.print_type import PrintType
 from utils.account_type import AccountType
+from report.reports import miscellaneous
 
 
 def read_config():
@@ -33,34 +34,35 @@ def main():
     # Expense reports
     expense_config = config['expense']
     expense_root_account = book.root_account.children(name=expense_config['root_account_name'])
-    general.print_reports(AccountType.EXPENSE, print_types, expense_root_account, expense_config, time_delta, years,
-                          json_path, html_path, save_result=False)
+    expense = general.print_reports(AccountType.EXPENSE, print_types, expense_root_account, expense_config, time_delta,
+                                    years, json_path, html_path)
 
     # Expense after deduction reports
     expense_after_deduction_config = config['expense_after_deduction']
     expense_after_deduction_root_account = book.root_account.children(
         name=expense_after_deduction_config['root_account_name'])
-    general.print_reports(AccountType.EXPENSE_AFTER_DEDUCTION, print_types, expense_after_deduction_root_account,
-                          expense_after_deduction_config, time_delta, years, json_path, html_path, save_result=False)
+    expense_after_deduction = general.print_reports(AccountType.EXPENSE_AFTER_DEDUCTION, print_types,
+                                                    expense_after_deduction_root_account,
+                                                    expense_after_deduction_config, time_delta, years, json_path,
+                                                    html_path)
 
     # Income reports
     income_config = config['income']
     income_root_account = book.root_account.children(name=income_config['root_account_name'])
-    general.print_reports(AccountType.INCOME, print_types, income_root_account, income_config, time_delta, years,
-                          json_path, html_path, save_result=False)
+    income = general.print_reports(AccountType.INCOME, print_types, income_root_account, income_config, time_delta,
+                                   years, json_path, html_path)
 
     # Assets reports
     assets_config = config['assets']
     assets_root_account = book.root_account.children(name=assets_config['root_account_name'])
     assets = general.print_reports(AccountType.ASSETS, print_types, assets_root_account, assets_config, time_delta,
-                                   years, json_path, html_path, save_result=True)
+                                   years, json_path, html_path)
 
     # Liabilities reports
     liabilities_config = config['liabilities']
     liabilities_root_account = book.root_account.children(name=liabilities_config['root_account_name'])
     liabilities = general.print_reports(AccountType.LIABILITY, print_types, liabilities_root_account,
-                                        liabilities_config,
-                                        time_delta, years, json_path, html_path, save_result=True)
+                                        liabilities_config, time_delta, years, json_path, html_path)
 
     # Networth reports
     networth_config = config['networth']
@@ -69,7 +71,7 @@ def main():
     # Savings reports
     savings_config = config['savings']
     assets_root_account = book.root_account.children(name=savings_config['root_account_name'])
-    savings.print_reports(print_types, assets_root_account, savings_config, time_delta, years, json_path, html_path)
+    saving = savings.print_reports(print_types, assets_root_account, savings_config, time_delta, years, json_path, html_path)
 
     # Transactions
     tx_config = config['transactions']
@@ -78,6 +80,11 @@ def main():
     # Transaction Groups
     tx_groups_config = config['transaction_groups']
     tx_groups.print_transaction_groups(book.transactions, tx_groups_config, json_path)
+
+    # Miscellaneous report
+    miscellaneous_config = config['miscellaneous_report']
+    miscellaneous.print_reports(miscellaneous_config, time_delta, expense, expense_after_deduction, income, assets,
+                                liabilities, saving, json_path)
 
     book.close()
 

@@ -6,8 +6,7 @@ from report.utils.print_type import PrintType
 from report.utils.account_type import AccountType
 
 
-def print_reports(account_type, print_types, root_account, config, time_delta, years, json_path, html_path,
-                  save_result):
+def print_reports(account_type, print_types, root_account, config, time_delta, years, json_path, html_path):
     report_name_suffix = config['report_name_suffix']
     with_running_balance = config['with_running_balance']
 
@@ -26,8 +25,7 @@ def print_reports(account_type, print_types, root_account, config, time_delta, y
         totals_root = __print_report(root_account, year, time_delta, filter_accounts, filter_type,
                                      print_types, json_path, html_path,
                                      file_name_suffix, report_name_suffix, with_running_balance)
-        if save_result:
-            result[year] = totals_root
+        result[year] = totals_root
 
     return result
 

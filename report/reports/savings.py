@@ -6,6 +6,8 @@ from report.utils.print_type import PrintType
 
 
 def print_reports(print_types, root_account, config, time_delta, years, json_path, html_path):
+    result = {}
+
     file_name_suffix = "_Savings"
     report_name_suffix = config['report_name_suffix']
     with_running_balance = config['with_running_balance']
@@ -46,6 +48,8 @@ def print_reports(print_types, root_account, config, time_delta, years, json_pat
 
         set_balances_on_parents(report_account_total)
 
+        result[year] = report_account_total
+
         report_name = str(year) + report_name_suffix
         file_name = str(year) + file_name_suffix
 
@@ -55,6 +59,8 @@ def print_reports(print_types, root_account, config, time_delta, years, json_pat
             print_report(json_path, report_name, file_name, report_account_total)
         if PrintType.MD in print_types:
             print_markdown(report_name, report_account_total)
+
+    return result
 
 
 def __get_leaf_accounts(root_account_total):
