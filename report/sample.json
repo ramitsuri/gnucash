@@ -6,18 +6,22 @@
   "years": [
     2023
   ],
-  "print_types": ["h", "j"],
+  "print_types": [
+    "h",
+    "j"
+  ],
   "expense": {
     "root_account_name": "Expenses",
     "report_name_suffix": " Expenses",
+    "with_running_balance": false
+  },
+  "expense_after_deduction": {
+    "root_account_name": "Expenses",
+    "report_name_suffix": " After Deduction Expenses",
     "with_running_balance": false,
-    "with_filter": {
-      "report_name_suffix": " After Deduction Expenses",
-      "with_running_balance": false,
-      "exclude_accounts": [
-        "Expenses:Taxes"
-      ]
-    }
+    "exclude_accounts": [
+      "Expenses:Taxes"
+    ]
   },
   "income": {
     "root_account_name": "Income",
@@ -51,7 +55,9 @@
     },
     "brokerage": {
       "report_account_name": "Brokerage",
-      "accounts": ["Assets:Investments:Brokerage Account"]
+      "accounts": [
+        "Assets:Investments:Brokerage Account"
+      ]
     },
     "savings": {
       "report_account_name": "Savings",
@@ -61,7 +67,7 @@
   "transactions": {
     "current_and_last_month_only": false
   },
-  "transaction_groups" : [
+  "transaction_groups": [
     {
       "identifier": "Trip2023",
       "display_name": "Vacation 2023"

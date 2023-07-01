@@ -36,6 +36,13 @@ def main():
     general.print_reports(AccountType.EXPENSE, print_types, expense_root_account, expense_config, time_delta, years,
                           json_path, html_path, save_result=False)
 
+    # Expense after deduction reports
+    expense_after_deduction_config = config['expense_after_deduction']
+    expense_after_deduction_root_account = book.root_account.children(
+        name=expense_after_deduction_config['root_account_name'])
+    general.print_reports(AccountType.EXPENSE_AFTER_DEDUCTION, print_types, expense_after_deduction_root_account,
+                          expense_after_deduction_config, time_delta, years, json_path, html_path, save_result=False)
+
     # Income reports
     income_config = config['income']
     income_root_account = book.root_account.children(name=income_config['root_account_name'])

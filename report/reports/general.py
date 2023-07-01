@@ -6,29 +6,21 @@ from report.utils.print_type import PrintType
 from report.utils.account_type import AccountType
 
 
-def print_reports(account_type, print_types, root_account, config, time_delta, years, json_path, html_path, save_result):
+def print_reports(account_type, print_types, root_account, config, time_delta, years, json_path, html_path,
+                  save_result):
     report_name_suffix = config['report_name_suffix']
     with_running_balance = config['with_running_balance']
 
     result = {}
 
-    file_name_suffix = __report_file_name_suffix(account_type, False)
-    for year in years:
-        totals_root = __print_report(root_account, year, time_delta, [], None, print_types, json_path, html_path,
-                                     file_name_suffix, report_name_suffix, with_running_balance)
-        if save_result:
-            result[year] = totals_root
-
-    if 'with_filter' in config:
-        with_filter = config['with_filter']
+    if 'exclude_accounts' in config:
+        filter_accounts = config['exclude_accounts']
+        filter_type = FilterType.EXCLUDE
     else:
-        return result
+        filter_accounts = []
+        filter_type = None
 
-    filter_accounts = with_filter['exclude_accounts']
-    filter_type = FilterType.EXCLUDE
-    file_name_suffix = __report_file_name_suffix(account_type, True)
-    report_name_suffix = with_filter['report_name_suffix']
-    with_running_balance = with_filter['with_running_balance']
+    file_name_suffix = __report_file_name_suffix(account_type)
 
     for year in years:
         totals_root = __print_report(root_account, year, time_delta, filter_accounts, filter_type,
@@ -66,12 +58,12 @@ def __print_report(root_account, year, time_delta, filter_accounts, filter_type,
     return totals_root
 
 
-def __report_file_name_suffix(account_type, for_exclusion):
+def __report_file_name_suffix(account_type):
     if account_type.value == AccountType.EXPENSE.value:
-        if for_exclusion:
-            return "_After_Deduction_Expenses"
-        else:
-            return "_Expenses"
+        return "_Expenses"
+
+    if account_type.value == AccountType.EXPENSE_AFTER_DEDUCTION.value:
+        return "_After_Deduction_Expenses"
 
     if account_type.value == AccountType.INCOME.value:
         return "_Income"
