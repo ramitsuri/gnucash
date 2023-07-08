@@ -56,7 +56,4 @@ def __print_transactions(transactions, account_names, year, month):
 
 
 def __get_account_name(account, account_names):
-    if not account.fullname:
-        return account_names[account.guid]
-    else:
-        return account.fullname
+    return account_names[account.guid]
