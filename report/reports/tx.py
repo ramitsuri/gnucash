@@ -44,12 +44,16 @@ def __print_transactions(transactions, account_names, year, month):
         splits = []
         total = Decimal("0.0")
         for split in transaction.splits:
+            if split.account.is_template:
+                continue
             if split.is_debit:
                 total += split.value
                 splits.append(Split(split.value, __get_account_name(split.account, account_names)))
             else:
                 splits.append(Split(split.value, __get_account_name(split.account, account_names)))
 
+        if not splits:
+            continue
         result.append(Transaction(transaction.post_date, total, splits, transaction.description, transaction.num))
 
     return result
