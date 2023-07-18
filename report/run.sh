@@ -21,9 +21,6 @@ then
   write_log "Already ran at $last_run_time, modified: $gnu_file_modified_time"
   write_log "-----------"
   exit
-else
-  write_log "Difference: $difference"
-  write_log "-----------"
 fi
 
 cd /home/pi/usbdrv/gnucash/python_projects || exit
